@@ -6,9 +6,9 @@ set -euo pipefail
 main() {
     local arch="${1}"
 
-    local binutils=2.25.1 \
-          gcc=5.3.0 \
-          target="${arch}-unknown-freebsd10"
+    local binutils=2.32 \
+          gcc=6.4.0 \
+          target="${arch}-unknown-freebsd12"
 
     local dependencies=(
         bzip2
@@ -34,11 +34,11 @@ main() {
 
     mkdir "${td}"/{binutils,gcc}{,-build} "${td}/freebsd"
 
-    curl --retry 3 -sSfL "https://ftp.gnu.org/gnu/binutils/binutils-${binutils}.tar.bz2" -O
-    tar -C "${td}/binutils" --strip-components=1 -xjf "binutils-${binutils}.tar.bz2"
+    curl --retry 3 -sSfL "https://ftp.gnu.org/gnu/binutils/binutils-${binutils}.tar.xz" -O
+    tar -C "${td}/binutils" --strip-components=1 -xJf "binutils-${binutils}.tar.xz"
 
-    curl --retry 3 -sSfL "https://ftp.gnu.org/gnu/gcc/gcc-${gcc}/gcc-${gcc}.tar.bz2" -O
-    tar -C "${td}/gcc" --strip-components=1 -xjf "gcc-${gcc}.tar.bz2"
+    curl --retry 3 -sSfL "https://ftp.gnu.org/gnu/gcc/gcc-${gcc}/gcc-${gcc}.tar.xz" -O
+    tar -C "${td}/gcc" --strip-components=1 -xJf "gcc-${gcc}.tar.xz"
 
     pushd "${td}"
 
@@ -57,7 +57,7 @@ main() {
             ;;
     esac
 
-    curl --retry 3 -sSfL "http://ftp.freebsd.org/pub/FreeBSD/releases/${bsd_arch}/10.2-RELEASE/base.txz" -O
+    curl --retry 3 -sSfL "http://ftp.freebsd.org/pub/FreeBSD/releases/${bsd_arch}/12.1-RELEASE/base.txz" -O
     tar -C "${td}/freebsd" -xJf base.txz ./usr/include ./usr/lib ./lib
 
     cd binutils-build
